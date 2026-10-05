@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tanzmitmir</title>
+    <meta
+      name="description"
+      content="Tanzmitmir – Tanzprojekte lokal, EU-weit und darüber hinaus. Tanz im öffentlichen Raum, in der Natur und für jede*n zugänglich."
+    />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+:root {
+  --green-dark: #123d2b;
+  --green-mid: #2c6348;
+  --green-light: #528f6d;
+  --black: #0d1611;
+  --white: #ffffff;
+  --grey: #526357;
+  --light-grey: #f2f7f4;
+  --bg-primary: var(--light-grey);
+  --bg-secondary: var(--white);
+  --text-primary: var(--black);
+  --text-secondary: #2f4538;
+  --border-light: rgba(18, 61, 43, 0.1);
+  --shadow-light: rgba(18, 61, 43, 0.08);
+}
+
+body.dark-mode {
+  --bg-primary: #0a1610;
+  --bg-secondary: #132219;
+  --text-primary: #eaf3ed;
+  --text-secondary: #b4cbbe;
+  --border-light: rgba(255, 255, 255, 0.1);
+  --shadow-light: rgba(0, 0, 0, 0.35);
+  --green-dark: #6ebf90;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(38, 92, 65, 0.45), transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(20, 58, 41, 0.5), transparent 45%),
+    linear-gradient(165deg, #07120c 0%, #0c1a13 45%, #102118 100%);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text-primary);
+  background:
+    radial-gradient(circle at 15% 0%, rgba(138, 186, 153, 0.35), transparent 45%),
+    radial-gradient(circle at 85% 15%, rgba(168, 207, 180, 0.28), transparent 40%),
+    linear-gradient(165deg, #f2f7f3 0%, #e4eee6 45%, #d6e5da 100%);
+  line-height: 1.6;
+  min-height: 100vh;
+  cursor: none;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+#particles-js {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.45), transparent 70%);
+  transition: background 0.3s ease;
+}
+
+#dance-motion {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.62;
+}
+
+#dance-motion::before,
+#dance-motion::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 43%;
+  width: min(72vw, 920px);
+  height: min(30vw, 380px);
+  border: 1px solid rgba(82, 143, 109, 0.26);
+  border-radius: 50%;
+  will-change: transform;
+}
+
+#dance-motion::before {
+  transform: translate3d(-50%, -50%, 0) rotate(-14deg) scaleY(0.72);
+  animation: danceSway 18s ease-in-out infinite alternate;
+}
+
+#dance-motion::after {
+  width: min(56vw, 720px);
+  height: min(23vw, 290px);
+  border-color: rgba(44, 99, 72, 0.2);
+  transform: translate3d(-50%, -50%, 0) rotate(18deg) scaleY(0.72);
+  animation: danceSwayReverse 22s ease-in-out infinite alternate;
+}
+
+.top-strip,
+.site-header,
+main,
+.site-footer {
+  position: relative;
+  z-index: 2;
+}
+
+#custom-cursor {
+  position: fixed;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--green-dark);
+  border-radius: 50%;
+  transform: translate3d(calc(var(--cursor-x, 0px) - 50%), calc(var(--cursor-y, 0px) - 50%), 0) scale(var(--cursor-scale, 1));
+  pointer-events: none;
+  z-index: 9999;
+  transition: width 0.18s ease, height 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+#custom-cursor::before {
+  content: '';
+  position: absolute;
+  inset: 50%;
+  width: 6px;
+  height: 6px;
+  background: var(--green-dark);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cursor-hover {
+  --cursor-scale: 1.8;
+  border-color: rgba(96, 137, 95, 0.8) !important;
+}
+
+.cursor-hover::before {
+  width: 10px;
+  height: 10px;
+}
+
+.top-strip {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 0.65rem 1rem;
+  font-size: 0.95rem;
+  border-bottom: 1px solid var(--border-light);
+  border-radius: 0 0 18px 18px;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.site-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.32), rgba(227, 248, 235, 0.16) 48%, rgba(206, 237, 224, 0.24)),
+    rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-top-color: rgba(255, 255, 255, 0.68);
+  box-shadow: 0 10px 30px rgba(26, 79, 52, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -1px 0 rgba(151, 206, 173, 0.22);
+  position: sticky;
+  top: 0.75rem;
+  z-index: 20;
+  margin: 0.75rem 1rem 0;
+  border-radius: 20px;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  overflow: hidden;
+  isolation: isolate;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse at 8% -35%, rgba(255, 255, 255, 0.72), transparent 42%),
+    radial-gradient(ellipse at 92% 5%, rgba(155, 219, 255, 0.28), transparent 34%),
+    radial-gradient(ellipse at 48% 125%, rgba(227, 166, 255, 0.24), transparent 42%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.site-header::after {
+  content: '';
+  position: absolute;
+  inset: -80%;
+  border-radius: inherit;
+  background: conic-gradient(from 180deg at 50% 50%, rgba(111, 238, 190, 0.18), rgba(112, 190, 255, 0.28), rgba(224, 157, 255, 0.28), rgba(255, 211, 133, 0.2), rgba(111, 238, 190, 0.18));
+  filter: blur(28px);
+  mix-blend-mode: screen;
+  opacity: 0.86;
+  pointer-events: none;
+  z-index: -1;
+  animation: liquidIridescence 18s ease-in-out infinite alternate;
+}
+
+.site-header > * {
+  position: relative;
+  z-index: 1;
+}
+
+body.dark-mode .site-header {
+  background: linear-gradient(115deg, rgba(30, 57, 43, 0.42), rgba(27, 54, 45, 0.28) 48%, rgba(39, 67, 58, 0.38)), rgba(10, 22, 16, 0.2);
+  border-color: rgba(157, 220, 184, 0.28);
+  border-top-color: rgba(218, 255, 231, 0.34);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(223, 255, 234, 0.28), inset 0 -1px 0 rgba(111, 191, 144, 0.2);
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: end;
+  margin-right: 1rem;
+}
+
+.brand {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+}
+
+.nav-links {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+}
+.brand {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary) !important;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  line-height: 1;
+}
+
+.brand-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 0.35rem 0.85rem 0.35rem 0.45rem;
+  border: 1px solid var(--green-dark);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--green-dark);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1;
+  transform: none;
+  text-shadow: none;
+  box-shadow: none;
+}
+
+.brand-wordmark .brand-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  margin-right: 0.5rem;
+  box-shadow: 0 4px 10px rgba(9, 29, 19, 0.14);
+}
+
+.brand-wordmark .wordmark-initial {
+  color: #6ebf90 !important;
+}
+
+.brand-wordmark .wordmark-initial:first-child {
+  color: var(--green-light);
+}
+
+.brand-wordmark .wordmark-initial:nth-child(2) {
+  color: var(--green-light);
+}
+
+.brand-wordmark .wordmark-initial:nth-child(3) {
+  color: var(--green-mid);
+}
+
+.brand-wordmark .wordmark-initial {
+  color: var(--green-dark);
+}
+
+.brand-logo {
+  width: 45px;
+  height: 45px;
+  border-radius: 13px;
+  box-shadow: 0 8px 18px rgba(9, 29, 19, 0.18);
+}
+
+.wordmark-initial {
+  color: var(--green-dark);
+}
+
+.wordmark-initial:first-child {
+  color: var(--green-light);
+}
+
+.wordmark-rest {
+  color: var(--green-dark);
+}
+
+.wordmark-rest.first {
+  color: var(--green-light);
+}
+
+.wordmark-rest.second {
+  color: var(--green-mid);
+}
+
+.wordmark-rest.third {
+  color: var(--green-dark);
+}
+
+.hero h1 .wordmark-rest {
+  display: inline-block;
+  font-size: 0.72em;
+}
+
+.wordmark-initial:nth-child(2) {
+  color: var(--green-light);
+}
+
+.wordmark-initial:nth-child(3) {
+  color: var(--green-mid);
+}
+
+.brand:link,
+.brand:visited,
+.brand:hover,
+.brand:active {
+  color: var(--text-primary) !important;
+  text-decoration: none;
+}
+
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--green-dark);
+  color: var(--green-dark);
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.3s ease, border-color 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+  color: var(--green-dark);
+}
+
+main {
+  width: min(980px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 0.75rem 0 4rem;
+}
+
+.hero {
+  text-align: center;
+  padding: 0.5rem 0 2rem;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  color: var(--green-dark);
+  margin-bottom: 0;
+  opacity: 0;
+  animation: fadeInUp 1.2s ease 0.2s forwards;
+}
+
+.hero-panel {
+  margin: 0 auto 2rem;
+  max-width: 760px;
+  border-radius: 24px;
+  padding: 1rem 1.5rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.56);
+  background: linear-gradient(125deg, rgba(255, 255, 255, 0.78), rgba(238, 248, 239, 0.64));
+  box-shadow: 0 24px 64px rgba(12, 28, 19, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+}
+
+.hero-panel h3 {
+  margin-bottom: 0.5rem;
+  color: var(--green-dark);
+}
+
+.hero-panel p {
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+}
+
+.hero-panel-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.hero-panel-card {
+  text-align: left;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.58);
+  padding: 1.1rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+.shadcn-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.shadcn-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--border-light);
+  padding: 0.18rem 0.6rem;
+  margin-bottom: 1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.shadcn-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 0.65rem 0.9rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.shadcn-button.primary {
+  background: var(--green-dark);
+  color: var(--white);
+  border-color: transparent;
+}
+
+.hero h1 {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  font-weight: 700;
+  color: var(--green-dark);
+  margin-bottom: 0.75rem;
+  opacity: 0;
+  animation: fadeInUp 1.2s ease 0.2s forwards;
+}
+
+.hero h1.is-over-nav {
+  visibility: hidden;
+}
+
+.hero-title-overlay {
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  width: fit-content !important;
+  max-width: 100%;
+  margin: 0 !important;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  font-weight: 700;
+  color: var(--green-dark);
+  opacity: 1 !important;
+  animation: none !important;
+  pointer-events: none;
+  isolation: isolate;
+  mix-blend-mode: normal;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.hero-title-overlay .wordmark-rest {
+  display: inline-block;
+  font-size: 0.72em;
+}
+
+.intro-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(242, 248, 243, 0.84));
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 52px rgba(15, 37, 25, 0.16);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-bottom: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.66);
+  transition: transform 0.28s ease, box-shadow 0.28s ease, background-color 0.3s ease;
+}
+
+.intro-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 34px 72px rgba(17, 40, 29, 0.2);
+}
+
+.intro-card figure {
+  margin: 0;
+}
+
+.intro-card img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  aspect-ratio: 3 / 2;
+}
+
+.intro-text {
+  padding: 2rem;
+}
+
+.intro-text p {
+  max-width: 680px;
+  margin: 0 0 1.25rem;
+  color: var(--text-secondary);
+}
+
+.signature {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  color: var(--green-dark);
+}
+
+.section {
+  padding: 2.5rem 0;
+}
+
+.section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--green-dark);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.gallery-grid,
+.events-grid,
+.contact-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.gallery-grid,
+.events-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.card {
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.92), rgba(244, 250, 244, 0.82));
+  border-radius: 18px;
+  box-shadow: 0 18px 38px rgba(16, 33, 24, 0.12);
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.66);
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease, background-color 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 58px rgba(15, 39, 26, 0.17);
+  border-color: rgba(96, 137, 95, 0.32);
+}
+
+.image-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin-bottom: 1rem;
+  transition: transform 0.35s ease;
+}
+
+.image-card:hover img {
+  transform: scale(1.03);
+}
+
+.card-content h3,
+.card h3 {
+  margin-bottom: 0.75rem;
+  font-size: 1.15rem;
+  color: var(--green-dark);
+}
+
+.card-content p,
+.card p {
+  color: var(--text-secondary);
+}
+
+.contact-grid {
+  grid-template-columns: 1.3fr 0.9fr;
+}
+
+.contact-form {
+  display: grid;
+  gap: 1rem;
+}
+
+label {
+  display: grid;
+  gap: 0.5rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 0.95rem 1rem;
+  font: inherit;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.85rem 1.4rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: var(--green-dark);
+  color: var(--white);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn.primary:hover {
+  background: #48654b;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.about-grid,
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding-left: 2rem;
+  border-left: 3px solid var(--green-light);
+}
+
+.timeline-card {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline-card::before {
+  content: '';
+  position: absolute;
+  left: -2.75rem;
+  top: 1.5rem;
+  width: 12px;
+  height: 12px;
+  background: var(--green-dark);
+  border: 3px solid var(--green-light);
+  border-radius: 50%;
+}
+
+.team-grid .card:last-child {
+  grid-column: 1 / -1;
+}
+
+.team-grid .card:last-child ul li {
+  margin: 0.3rem 0;
+}
+
+.team-info h3 {
+  color: var(--green-dark);
+}
+
+.site-footer {
+  text-align: center;
+  padding: 1.5rem 0 3rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+body.dark-mode .hero-panel,
+body.dark-mode .hero-panel-card,
+body.dark-mode .intro-card,
+body.dark-mode .card {
+  background: linear-gradient(145deg, rgba(20, 32, 25, 0.86), rgba(15, 24, 19, 0.78));
+  border-color: rgba(131, 199, 177, 0.26);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.34);
+}
+
+@keyframes danceSway {
+  from { transform: translate3d(-50%, -50%, 0) rotate(-17deg) scaleY(0.72); }
+  to { transform: translate3d(-47%, -44%, 0) rotate(-8deg) scaleY(0.82); }
+}
+
+@keyframes danceSwayReverse {
+  from { transform: translate3d(-50%, -50%, 0) rotate(21deg) scaleY(0.72); }
+  to { transform: translate3d(-54%, -46%, 0) rotate(12deg) scaleY(0.82); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #dance-motion::before,
+  #dance-motion::after,
+  .hero h1 {
+    animation: none;
+  }
+
+  .hero h1 {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 980px) {
+  .intro-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .gallery-grid,
+  .events-grid,
+  .contact-grid,
+  .about-grid,
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-grid .card:last-child {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 1100px) {
+  .header-controls {
+    gap: 0.5rem;
+    grid-column: 3;
+    grid-row: 1;
+    margin-right: 0;
+  }
+
+  .site-header {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    padding: 1rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .nav-links {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: stretch;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+    transform-origin: center;
+    transition: transform 0.25s ease, background-color 0.25s ease;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+    margin-top: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px) scaleY(0.92);
+    transform-origin: top;
+    pointer-events: none;
+    transition: max-height 0.38s ease, opacity 0.24s ease, transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .site-header:not(.open) .nav-links {
+    display: none;
+  }
+
+  .site-header.open .nav-links {
+    display: flex;
+    max-height: 20rem;
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+    pointer-events: auto;
+  }
+
+  .site-header.open .menu-toggle {
+    animation: menuClap 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@keyframes menuClap {
+  0% { transform: scale(1); }
+  45% { transform: scale(0.9) rotate(-2deg); }
+  75% { transform: scale(1.06) rotate(1deg); }
+  100% { transform: scale(1); }
+}
+
+@keyframes liquidIridescence {
+  0% {
+    transform: translate3d(-8%, -4%, 0) rotate(-8deg) scale(0.95);
+  }
+  50% {
+    transform: translate3d(5%, 4%, 0) rotate(8deg) scale(1.05);
+  }
+  100% {
+    transform: translate3d(10%, -2%, 0) rotate(16deg) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-links,
+  .menu-toggle,
+  .site-header::after {
+    transition: none;
+    animation: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 15px;
+    cursor: auto;
+  }
+
+  #custom-cursor {
+    display: none;
+  }
+
+  .top-strip {
+    padding: 0.55rem 0.75rem;
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+
+  .site-header {
+    padding: 0.75rem 0.85rem 0.4rem;
+    column-gap: 0.35rem;
+  }
+
+  .brand {
+    font-size: 1.08rem;
+  }
+
+  .brand-wordmark {
+    gap: 0;
+    letter-spacing: normal;
+  }
+
+  .brand-wordmark .brand-logo {
+    margin-right: 0.35rem;
+  }
+
+  .brand-logo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .menu-toggle {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.8rem;
+    line-height: 1;
+  }
+
+  main {
+    width: min(100%, calc(100% - 0.8rem));
+    padding: 0 0 3rem;
+  }
+
+  .hero {
+    padding: 0 0 1.25rem;
+  }
+
+  .hero h1,
+  .hero-title-overlay {
+    font-size: clamp(2.05rem, 9vw, 2.7rem);
+  }
+
+  .hero-panel {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-panel-row,
+  .shadcn-row {
+    flex-direction: column;
+  }
+
+  .shadcn-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .intro-card {
+    border-radius: 18px;
+  }
+
+  .intro-text {
+    padding: 1.25rem;
+  }
+
+  .section {
+    padding: 1.7rem 0;
+  }
+
+  .section h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .card {
+    padding: 1.15rem;
+    border-radius: 16px;
+  }
+
+  .contact-form label,
+  .contact-form input,
+  .contact-form textarea,
+  .social-card p,
+  .card p {
+    font-size: 0.95rem;
+  }
+
+  input,
+  textarea {
+    padding: 0.8rem 0.9rem;
+  }
+
+  .site-footer {
+    padding: 1.25rem 0 2.5rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (min-width: 761px) {
+  .site-header > .header-controls {
+    position: static;
+  }
+}
+
+</style>
+</head>
+  <body class="dark-mode">
+    <div id="particles-js"></div>
+    <div id="dance-motion" aria-hidden="true"></div>
+    <div id="custom-cursor"></div>
+    <header class="site-header">
+      <a class="brand" href="#home">
+        <span class="brand-wordmark" aria-label="TanzMitMir"><img class="brand-logo" src="assets/kassei-logo.svg" alt="" /><span class="wordmark-initial">T</span><span class="wordmark-initial">M</span><span class="wordmark-initial">M</span></span>
+      </a>
+      <div class="header-controls">
+        <button class="menu-toggle" aria-expanded="false" aria-controls="main-navigation">☰ Menü</button>
+      </div>
+      <nav class="nav-links" id="main-navigation">
+        <a href="#home">Start</a>
+        <a href="#projects">Projekte</a>
+        <a href="#schedule">Formate</a>
+        <a href="#contact">Kontakt</a>
+        <a href="#impressum">Impressum</a>
+      </nav>
+    </header>
+
+    <main id="home">
+      <!-- HERO / VEREINSVORSTELLUNG -->
+      <section class="hero">
+        <h1 aria-label="TanzMitMir"><span class="wordmark-initial">T</span><span class="wordmark-rest first">anz</span><span class="wordmark-initial">M</span><span class="wordmark-rest second">it</span><span class="wordmark-initial">M</span><span class="wordmark-rest third">ir</span></h1>
+        <div class="hero-panel">
+          <span class="shadcn-badge">Tanz im Freien · Gemeinschaft · Natur</span>
+          <div class="hero-panel-card">
+            <h3>Gemeinsam tanzen. Draußen. Frei.</h3>
+            <p>
+              Tanzmitmir ist ein gemeinnütziger Verein für Tanzprojekte im
+              öffentlichen Raum – lokal, EU-weit und darüber hinaus.
+            </p>
+            <div class="hero-panel-row">
+              <a href="#projects" class="shadcn-button primary">Projekte</a>
+              <a href="#contact" class="shadcn-button">Kontakt</a>
+            </div>
+          </div>
+        </div>
+        <article class="intro-card">
+          <figure>
+            <img
+              src="https://images.unsplash.com/photo-1504609813442-a8924e83f76e?auto=format&fit=crop&w=1200&q=85"
+              alt="Tänzerin inmitten einer grünen Landschaft"
+              loading="lazy"
+            />
+          </figure>
+          <div class="intro-text">
+            <p><strong>Wir tanzen draußen an frischen Orten.</strong></p>
+            <p>
+              Wir initiieren, organisieren und veranstalten Tanzaufführungen und
+              Mitmachangebote ohne Eintrittspreise. So wird Tanz für neue
+              Tanzbegeisterte erlebbar – direkt in der Natur und mitten im Leben.
+            </p>
+          </div>
+        </article>
+      </section>
+
+      <!-- PROJEKTE / WAS WIR MACHEN -->
+      <section id="projects" class="section">
+        <h2>Unsere Projekte</h2>
+        <div class="events-grid">
+          <article class="card">
+            <h3>🌿 Tanz im öffentlichen Raum</h3>
+            <p><strong>Lokal bis international</strong><br/>Wir realisieren Tanzprojekte lokal, EU-weit und darüber hinaus – direkt dort, wo Menschen leben.</p>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">Zugänglich für alle</p>
+          </article>
+          <article class="card">
+            <h3>👐 Mitmachangebote</h3>
+            <p><strong>Für neue Tanzbegeisterte</strong><br/>Wir machen Tanz in unterschiedlichen Formen erlebbar und erfahrbar – ohne Hürden und ohne Vorwissen.</p>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">Offen für jede*n</p>
+          </article>
+          <article class="card">
+            <h3>🌲 Tanz in der Natur</h3>
+            <p><strong>Unmittelbar erlebbar</strong><br/>Die Schönheit der Natur und die Vergänglichkeit des Tanzes harmonieren – genau darin liegt eine besondere Kraft.</p>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">Ohne Eintrittspreise</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- FORMATE -->
+      <section id="schedule" class="section">
+        <h2>Unsere Formate</h2>
+        <div class="timeline">
+          <article class="card timeline-card">
+            <h3>Öffentlich zugängliche Tanzaufführungen</h3>
+            <p><strong>Im öffentlichen Raum</strong><br/>Wir zeigen Tanz für jede*n – sichtbar, nahbar und mitten im Alltag.</p>
+            <p style="font-size: 0.9rem;">📍 Unterschiedliche Orte</p>
+          </article>
+          <article class="card timeline-card">
+            <h3>Mitmachformate ohne Eintrittspreise</h3>
+            <p><strong>Tanz erlebbar machen</strong><br/>Unsere Angebote öffnen Tanz für neue Zielgruppen und schaffen echte Begegnung.</p>
+            <p style="font-size: 0.9rem;">🎟 Kostenfrei</p>
+          </article>
+          <article class="card timeline-card">
+            <h3>Tanz an neuen Orten</h3>
+            <p><strong>Lokal, EU-weit und darüber hinaus</strong><br/>Wir bringen Tanz bewusst dorthin, wo er bisher noch nicht stattgefunden hat.</p>
+            <p style="font-size: 0.9rem;">🌍 Vernetzte Projekte</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- KONTAKT -->
+      <section id="contact" class="section contact-section">
+        <h2>Kontakt & Anfragen</h2>
+        <div class="contact-grid">
+          <form class="card contact-form">
+            <label>
+              Name
+              <input type="text" placeholder="Dein Name" />
+            </label>
+            <label>
+              E-Mail
+              <input type="email" placeholder="deine@email.de" />
+            </label>
+            <label>
+              Nachricht
+              <textarea rows="5" placeholder="Deine Frage oder Nachricht..."></textarea>
+            </label>
+            <button class="btn primary" type="submit">Senden</button>
+          </form>
+          <div class="card social-card">
+            <h3>☎ Direkter Kontakt</h3>
+            <p><strong>E-Mail:</strong><br/><a href="mailto:info@tanzmitmir.org" style="color: inherit;">info@tanzmitmir.org</a></p>
+            <p><strong>Telefon:</strong><br/><a href="tel:+4367763804033" style="color: inherit;">+ 43-(0)677-63804033</a></p>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">Schreib uns für Anfragen, Kooperationen und gemeinsame Formate rund um Tanzmitmir.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- IMPRESSUM -->
+      <section id="impressum" class="section impressum-section">
+        <h2>Impressum</h2>
+        <div class="card impressum-card" style="max-width: 600px; margin: 0 auto;">
+          <h3>Raumentwicklung Tanz</h3>
+          <p style="margin-top: 0.5rem;">
+            Ludwig-von-Köchelplatz 2 Top 14<br />
+            3500 Krems<br />
+            Österreich
+          </p>
+          <p style="margin-top: 1rem;"><strong>E-Mail:</strong> <a href="mailto:info@tanzmitmir.org" style="color: inherit;">info@tanzmitmir.org</a></p>
+          <p><strong>Telefon:</strong> <a href="tel:+4367763804033" style="color: inherit;">+ 43-(0)677-63804033</a></p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Copyright © Tanzmitmir · Raumentwicklung Tanz</p>
+      <p>Ludwig-von-Köchelplatz 2 Top 14 · 3500 Krems</p>
+      <p><a href="mailto:info@tanzmitmir.org" style="color: inherit;">info@tanzmitmir.org</a> · <a href="tel:+4367763804033" style="color: inherit;">+ 43-(0)677-63804033</a></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
